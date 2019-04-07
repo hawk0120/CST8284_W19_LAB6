@@ -6,7 +6,7 @@ public class Account {
 	// have correct check digit
 	private String firstName, lastName; // see below
 	private OurDate accountOpenedDate; // use OurDate
-	
+
 	public Account() {
 	}
 
@@ -33,34 +33,25 @@ public class Account {
 		return accountNumber;
 	}
 
-	private void setAccountNumber(String accountNumber) {	
+	private void setAccountNumber(String accountNumber) throws BadAccountInputException {	
 		/*TODO #1: Bad account number entered.
 		Test for presence of one hyphen in the account number.
 		Error message to output: Only one hyphen allowed in account number.
 		(3 marks)  */
-		//TODO #1: Run the 'Lab 6 TODO generator.jar' file and follow the instructions.
-		// Write the code here to test for the error condition indicated
-		// when the user attempts to enter a bad account number, and throw
-		// a BadAccountInputException containing the message provided.
-		// Only if there is no error should the account number be set.
 
-
-		try {
-
-			int j;
-			for(int i = 0; i <= accountNumber.length(); i++) {
-				char c = (char)i;
-				if (c == '-') {
-					j++;
-				}
+		int j = 0;
+		for(int i = 0; i <= accountNumber.length(); i++) {
+			char c = (char)i;
+			if (c == '-') {
+				j++;
 			}
-			if (j != 1) {
-				throw new BadAccountInputException;
-			}
-		} catch (BadAccountInputException e) {
-			System.out.println("Only one hyphen allowed in account number");
-			
-		} // End Catch block
+		}
+
+		if (j >= 2) {
+			throw new BadAccountInputException("The account number cannot have more than one hyphen");
+		}
+
+
 		this.accountNumber = accountNumber;		
 		//end method
 	}
@@ -83,29 +74,27 @@ public class Account {
 			this.lastName = lastName;
 	}
 
-	private static boolean isInputNameCorrect(String name) {
+	private static boolean isInputNameCorrect(String name) throws BadAccountInputException {
+
 		/*
 		 * TODO #2: Bad name entered.
 		 * 
 		 * Test that the name does not contain numbers. Error message to output: Name
 		 * contains a number; not allowed (3 marks)
 		 */
+	
+		for(int i = 0; i < name.length(); i++) {
+			char c = name.charAt(i);
+				if (Character.isDigit(c)) {
+					throw new BadAccountInputException("Names cannot contain numeric values");
+			}
 
-		// TODO #2: Write the code here to test for the error condition indicated,
-		// and throw a new BadAccountInputException with the message provided.
-		// Only if there is no error in the name should this function return true.
-
-		/*
-		 * try {
-		 * 
-		 * } catch (BadAccountInputException e) {
-		 * 
-		 * }
-		 */
-
+		}
+		return true;
 	}
 
 	private static boolean isCheckDigitCorrect(String accountNumber) {
+		return false;
 		/*
 		 * TODO #3: Implement the following checksum algorithm and use it to trigger an
 		 * exception if the account number is incorrect.
@@ -127,6 +116,20 @@ public class Account {
 		// otherwise false. Use the result to throw a new BadAccountInputException
 		// in the setAccountNumber() method, with the message "Bad account number;
 		// check digit failed." if the result of this method returns false
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 	}
 
 }
