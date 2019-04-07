@@ -1,5 +1,6 @@
 package cst8284.lab6;
 
+import java.io.FileNotFoundException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar; // Note: OurDate wraps Calendar
@@ -79,10 +80,16 @@ public class OurDate {
 		return this.day + "/" + this.month + "/" + this.year;
 	}
 
-	public boolean setOurDate(String s) {
+	public boolean setOurDate(String s) throws BadAccountInputException {
 		boolean result = true;
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		dateFormat.setLenient(false);
+		// TODO #4: Catch the following four exceptions, and rethrow BadAccountInputException
+		// in each catch block, along with the message indicated.
+	    // RuntimeException: "General runtime exception thrown setting start date"
+		// IllegalArgumentException: "Bad data type passed to an internal method"
+		// NumberFormatException: "Bad input value; date " + s + " contains non-numeric value"
+		// ParseException: "Date " + s + " not possible"		
 		try {
 			String[] dmy = s.split("/");
 			setYear(Integer.parseInt(dmy[2]));
@@ -90,13 +97,15 @@ public class OurDate {
 			setDay(Integer.parseInt(dmy[0]));
 			CALENDAR.setTime(dateFormat.parse(s));  // use calendar to check for impossible dates
 			return result;
-		} 
-		// TODO #4: Catch the following four exceptions, and rethrow BadAccountInputException
-		// in each catch block, along with the message indicated.
-	    // RuntimeException: "General runtime exception thrown setting start date"
-		// IllegalArgumentException: "Bad data type passed to an internal method"
-		// NumberFormatException: "Bad input value; date " + s + " contains non-numeric value"
-		// ParseException: "Date " + s + " not possible"
+		} catch (NumberFormatException g) {
+			throw new BadAccountInputException("Bad input value; date " + s + " contains non-numeric value");
+		} catch (IllegalArgumentException f) {
+			throw new BadAccountInputException("Bad data type passed to an internal method");
+		}  catch (ParseException h) {
+			throw new BadAccountInputException("Date " + s + " not possible");
+		} catch (RuntimeException e) {
+			throw new BadAccountInputException("General Runtime exception thrown setting start date");
+		}
 	}
 
 	// compares two OurDate objects for equality
