@@ -106,6 +106,10 @@ public class OurDate {
 		} catch (RuntimeException e) {
 			throw new BadAccountInputException("General Runtime exception thrown setting start date");
 		}
+		
+	
+	
+
 	}
 
 	// compares two OurDate objects for equality
