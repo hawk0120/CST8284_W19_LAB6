@@ -1,5 +1,7 @@
 package cst8284.lab6;
 
+import java.security.acl.LastOwnerException;
+
 public class Account {
 	private double startingBalance = 0; // cannot be negative or zero; throw error if negative
 	private String accountNumber = "000-000000"; // cannot begin with 0, can be < 100000, must have branch number, must
@@ -30,6 +32,7 @@ public class Account {
 	}
 
 	public String getAccountNumber() {
+		
 		return accountNumber;
 	}
 
@@ -93,8 +96,8 @@ public class Account {
 		return true;
 	}
 
-	private static boolean isCheckDigitCorrect(String accountNumber) {
-		return false;
+	private static boolean isCheckDigitCorrect(String accountNumber) throws BadAccountInputException {
+	
 		/*
 		 * TODO #3: Implement the following checksum algorithm and use it to trigger an
 		 * exception if the account number is incorrect.
@@ -111,25 +114,30 @@ public class Account {
 		 * last (i.e. check) digit (5 marks)
 		 *
 		 */
-		// TODO #3: Write the code here to test the account number, according to
-		// the algorithm indicated. If the check digit is correct return true,
-		// otherwise false. Use the result to throw a new BadAccountInputException
-		// in the setAccountNumber() method, with the message "Bad account number;
-		// check digit failed." if the result of this method returns false
+		 
+		int[] evens = {2, 4, 6, 8};
+		int num = Integer.parseInt(accountNumber);
+		int result = 0;
+		int count = 0;
+		for(int i = 0; i < accountNumber.length(); i++) {	
+			if(((result%2) != 0) && num != evens[i]) {
+				result = evens[count]* num;
+				count++;
+			} else {
+				count++;
+			}
+			
+			
+		}
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+		if ((result % 7 )== 0) {
+			System.out.println("Checksum was successful");
+			return true;
+			
+		} else {
+			throw new BadAccountInputException("Checksum Failed");
+
+		}
 	}
 
 }
