@@ -112,41 +112,28 @@ public class Account {
 		 *
 		 */
 
-		int[] odds = { 1, 3, 5, 7, 9 };
-		int num = 0;
-		int result = 0; // holds sum
-		int count = 0; // holds the current count number
-		int succeedNum = 0; //holds the succeeding number of occurrences of 
-		for (int i = 0; i < accountNumber.length(); ++i) {
-		    char c = accountNumber.charAt(i);
-		 
-		    if (c == '-'){
-		    	String[] n = accountNumber.split(accountNumber, '-');
-		    	String concat = n[0].toString() + n[1].toString();
-		    	num = Integer.parseInt(concat);
-		    } else {
-		    	num = Integer.parseInt(accountNumber);
-		    }
+		int sum = 0; //Holds the result of the checksum
+		int count = 0; //Holds the count number
+
+		for (int i = 0; i <= accountNumber.length(); i++ ) {
+			char c = accountNumber.charAt(i); //sets c equal the strings current value at the i
+			if (c == '-'){
+				count++; //skips the '-' in the account number
+			} else if ((accountNumber.charAt(count)) % 2 == 0) { //checks to see if the value is even
+				count++; // skips number if even
+			} else {
+				int digit = Character.digit(accountNumber.charAt(count), 10); //
+				count++; 
+				sum +=  Math.pow(digit, 2); //raises the digit to the power of two, adds that to the sum
+			}
 		}
-	
-		for (int k = 0; k < accountNumber.length(); k++) {
-			succeedNum = 0;
-			for (int j = 0; k < accountNumber.length(); j++)
-				if (count == odds[j]) {
-					result += odds[j];
-					succeedNum++;
-				} else if (succeedNum != 0) {
-					result += Math.pow(succeedNum, 2) * odds[j];
-				}
-		} // end forloop
-		for (int n = 0; n <= accountNumber.length(); n++) {
-			num %= 10;
-		}
-		if ((result % 7) == num) {
+
+		if ((sum % 7) == (accountNumber.charAt(accountNumber.length()))) { //checks if the sum moduls 7 is equal to the last digit
 			return true;
 		} else {
-			throw new BadAccountInputException("The account number is incorrect");
+			throw new BadAccountInputException("The check sum failed");
 		}
+
 	} // end method
 
 }
