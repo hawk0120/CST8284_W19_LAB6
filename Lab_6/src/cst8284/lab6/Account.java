@@ -1,7 +1,5 @@
 package cst8284.lab6;
 
-import java.security.acl.LastOwnerException;
-
 public class Account {
 	private double startingBalance = 0; // cannot be negative or zero; throw error if negative
 	private String accountNumber = "000-000000"; // cannot begin with 0, can be < 100000, must have branch number, must
@@ -21,6 +19,7 @@ public class Account {
 	}
 
 	public Account(String accountNumber, String firstName, String lastName, String startDate) {
+
 		setAccountNumber(accountNumber);
 		setFirstName(firstName);
 		setLastName(lastName);
@@ -32,31 +31,30 @@ public class Account {
 	}
 
 	public String getAccountNumber() {
-		
 		return accountNumber;
 	}
 
-	private void setAccountNumber(String accountNumber) throws BadAccountInputException {	
-		/*TODO #1: Bad account number entered.
-		Test for presence of one hyphen in the account number.
-		Error message to output: Only one hyphen allowed in account number.
-		(3 marks)  */
+	private void setAccountNumber(String accountNumber) throws BadAccountInputException {
+		/*
+		 * TODO #1: Bad account number entered. Test for presence of one hyphen in the
+		 * account number. Error message to output: Only one hyphen allowed in account
+		 * number. (3 marks)
+		 */
 
 		int j = 0;
 		for(int i = 0; i <= accountNumber.length(); i++) {
-			char c = (char)i;
-			if (c == '-') {
-				j++;
-			}
-		}
-
-		if (j >= 2) {
+			char c = (char)i; 
+			if (c == '-') { 
+				j++; 
+			}} 
+		if (j >= 2) { 
 			throw new BadAccountInputException("The account number cannot have more than one hyphen");
 		}
 
-
-		this.accountNumber = accountNumber;		
-		//end method
+		 if (isCheckDigitCorrect(accountNumber)) {
+		this.accountNumber = accountNumber;
+		 } 
+		// end method
 	}
 
 	public String getFirstName() {
@@ -85,19 +83,18 @@ public class Account {
 		 * Test that the name does not contain numbers. Error message to output: Name
 		 * contains a number; not allowed (3 marks)
 		 */
-	
-		for(int i = 0; i < name.length(); i++) {
-			char c = name.charAt(i);
-				if (Character.isDigit(c)) {
-					throw new BadAccountInputException("Names cannot contain numeric values");
-			}
 
+		for (int i = 0; i < name.length(); i++) {
+			char c = name.charAt(i);
+			if (Character.isDigit(c)) {
+				throw new BadAccountInputException("Names cannot contain numeric values");
+			}
 		}
 		return true;
 	}
 
-	private static boolean isCheckDigitCorrect(String accountNumber) throws BadAccountInputException {
-	
+	private static boolean isCheckDigitCorrect(String accountNumber){
+
 		/*
 		 * TODO #3: Implement the following checksum algorithm and use it to trigger an
 		 * exception if the account number is incorrect.
@@ -114,19 +111,32 @@ public class Account {
 		 * last (i.e. check) digit (5 marks)
 		 *
 		 */
-		
+
 		int[] odds = { 1, 3, 5, 7, 9 };
-		int num = Integer.parseInt(accountNumber);
+		int num = 0;
 		int result = 0; // holds sum
 		int count = 0; // holds the current count number
-		for (int i = 0; i < accountNumber.length(); i++) {
-			int k = 0; // holds succeeding value
-			for (int j = 0; i < accountNumber.length(); j++)
+		int succeedNum = 0; //holds the succeeding number of occurrences of 
+		for (int i = 0; i < accountNumber.length(); ++i) {
+		    char c = accountNumber.charAt(i);
+		 
+		    if (c == '-'){
+		    	String[] n = accountNumber.split(accountNumber, '-');
+		    	String concat = n[0].toString() + n[1].toString();
+		    	num = Integer.parseInt(concat);
+		    } else {
+		    	num = Integer.parseInt(accountNumber);
+		    }
+		}
+	
+		for (int k = 0; k < accountNumber.length(); k++) {
+			succeedNum = 0;
+			for (int j = 0; k < accountNumber.length(); j++)
 				if (count == odds[j]) {
 					result += odds[j];
-					k++;
-				} else if (k != 0) {
-					result += 2 * odds[j];
+					succeedNum++;
+				} else if (succeedNum != 0) {
+					result += Math.pow(succeedNum, 2) * odds[j];
 				}
 		} // end forloop
 		for (int n = 0; n <= accountNumber.length(); n++) {
@@ -137,6 +147,6 @@ public class Account {
 		} else {
 			throw new BadAccountInputException("The account number is incorrect");
 		}
-	}
+	} // end method
 
 }
