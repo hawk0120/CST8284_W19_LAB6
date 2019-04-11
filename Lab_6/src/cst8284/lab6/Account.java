@@ -114,29 +114,28 @@ public class Account {
 		 * last (i.e. check) digit (5 marks)
 		 *
 		 */
-		 
-		int[] evens = {2, 4, 6, 8};
-		int num = Integer.parseInt(accountNumber);
-		int result = 0;
-		int count = 0;
-		for(int i = 0; i < accountNumber.length(); i++) {	
-			if(((result%2) != 0) && num != evens[i]) {
-				result = evens[count]* num;
-				count++;
-			} else {
-				count++;
-			}
-			
-			
-		}
 		
-		if ((result % 7 )== 0) {
-			System.out.println("Checksum was successful");
+		int[] odds = { 1, 3, 5, 7, 9 };
+		int num = Integer.parseInt(accountNumber);
+		int result = 0; // holds sum
+		int count = 0; // holds the current count number
+		for (int i = 0; i < accountNumber.length(); i++) {
+			int k = 0; // holds succeeding value
+			for (int j = 0; i < accountNumber.length(); j++)
+				if (count == odds[j]) {
+					result += odds[j];
+					k++;
+				} else if (k != 0) {
+					result += 2 * odds[j];
+				}
+		} // end forloop
+		for (int n = 0; n <= accountNumber.length(); n++) {
+			num %= 10;
+		}
+		if ((result % 7) == num) {
 			return true;
-			
 		} else {
-			throw new BadAccountInputException("Checksum Failed");
-
+			throw new BadAccountInputException("The account number is incorrect");
 		}
 	}
 
