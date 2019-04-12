@@ -42,20 +42,25 @@ public class Account {
 		 */
 
 		int j = 0;
-		for(int i = 0; i <= accountNumber.length(); i++) {
-			char c = (char)i; 
+		for(int i = 0; i < accountNumber.length(); i++) {
+			char c = accountNumber.charAt(i); 
 			if (c == '-') { 
 				j++; 
-			}} 
+			}
+		} 
+
 		if (j >= 2) { 
 			throw new BadAccountInputException("The account number cannot have more than one hyphen");
 		}
 
-		 if (isCheckDigitCorrect(accountNumber)) {
-		this.accountNumber = accountNumber;
-		 } 
+		if (isCheckDigitCorrect(accountNumber)) {
+			this.accountNumber = accountNumber;
+		} else {
+			throw new BadAccountInputException("CheckSum Failed");
+		}
 		// end method
 	}
+
 
 	public String getFirstName() {
 		return firstName;
@@ -94,7 +99,6 @@ public class Account {
 	}
 
 	private static boolean isCheckDigitCorrect(String accountNumber){
-
 		/*
 		 * TODO #3: Implement the following checksum algorithm and use it to trigger an
 		 * exception if the account number is incorrect.
@@ -111,29 +115,17 @@ public class Account {
 		 * last (i.e. check) digit (5 marks)
 		 *
 		 */
-
 		int sum = 0; //Holds the result of the checksum
-		int count = 0; //Holds the count number
+		int power = 2; //Holds the power
 
-		for (int i = 0; i <= accountNumber.length(); i++ ) {
-			char c = accountNumber.charAt(i); //sets c equal the strings current value at the i
-			if (c == '-'){
-				count++; //skips the '-' in the account number
-			} else if ((accountNumber.charAt(count)) % 2 == 0) { //checks to see if the value is even
-				count++; // skips number if even
-			} else {
-				int digit = Character.digit(accountNumber.charAt(count), 10); //
-				count++; 
-				sum +=  Math.pow(digit, 2); //raises the digit to the power of two, adds that to the sum
-			}
-		}
+		accountNumber = accountNumber.replaceAll("-", "");
+		for (int i = 0; i < accountNumber.length()-1; i++) 
+			sum += (Character.getNumericValue(accountNumber.charAt(i)) % 2 != 0) ? Math.pow(Character.getNumericValue(accountNumber.charAt(i)), power*=2) : 0;	
 
-		if ((sum % 7) == (accountNumber.charAt(accountNumber.length()))) { //checks if the sum moduls 7 is equal to the last digit
+		if ((sum % 7) == (Character.getNumericValue(accountNumber.charAt(accountNumber.length()-1))))  //checks if the sum moduls 7 is equal to the last digit
 			return true;
-		} else {
-			throw new BadAccountInputException("The check sum failed");
-		}
 
-	} // end method
+		return false;
+	}
 
 }
